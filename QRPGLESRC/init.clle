@@ -1,0 +1,65 @@
+        pgm parm(&ifsdir &inlib &syncflg)
+
+            dcl  var(&ifsdir)   type(*char)  len(100)
+            dcl  var(&inlib)    type(*char)  len(10)
+            dcl  var(&syncflg)  type(*char)  len(1)
+            dcl  var(&errflg)   type(*dec)   len(1)
+            dcl  var(&inistr)   type(*char)  len(50)
+            dcl  var(&chgdir)   type(*char)  len(200)
+            dcl  var(&branch)   type(*char)  len(50)
+            dcl  var(&cmdstr)   type(*char)  len(300)
+            dcl  var(&star)     type(*char)  len(300) value('*')
+
+            /*Main Line*/
+             if  cond(&ifsdir *eq ' ') then(do)
+               goto cmdlbl(error1)
+             enddo
+
+             if cond(&inlib   *ne ' ') then(DO)
+              chkobj  obj(&inlib) objtype(*lib)
+              monmsg  msgid(cpf0000) exec(do)
+               chgvar var(&errflg)  value(1)
+               goto cmdlbl(error1)
+              enddo
+             enddo
+
+              chgcurlib  curlib(&inlib)
+              chkobj obj(*curlib/reposetup) objtype(*dtaara)
+              monmsg msgid(cpf9801) exec(do)
+                crtdtaara reposetup type(*char) len(300)
+                monmsg msgid(cpf0000)
+                enddo
+                chgdtaara  dtaara(*curlib/reposetup (1 120)) +
+                          value(&ifsdir)
+
+              if  cond(&syncflg *eq 'Y') then(do)
+                chgdtaara dtaara(*curlib/reposetup (125 10))     +
+                                value(&inlib)
+                chgvar var(&cmdstr) value('mkdir -p')
+                chgvar var(&cmdstr) value(%trim(&cmdstr) *bcat &ifsdir)
+                strqsh cmd(&cmdstr)
+                call  pgm(libexpr) parm((&inlib) (&star))
+                monmsg     msgid(cpf0000) exec(goto cmdlbl(error1))
+              enddo
+
+             chgvar var(&cmdstr) value(' ')
+             chgvar   var(&chgdir) value('cd ')
+             chgvar   var(&chgdir) value(%trim(&chgdir) *bcat +
+                          &ifsdir)
+
+             chgvar   var(&cmdstr) value('/home/cecuser/gitinit.sh')
+             chgvar   var(&cmdstr) value(%trim(&cmdstr) *bcat +
+                          %trim(&ifsdir))
+             chgvar   var(&cmdstr) value(%trim(&cmdstr) *bcat  +
+                                         &branch)
+             strqsh cmd(&cmdstr)
+
+
+     error1:
+             chgcurlib  curlib(*crtdft)
+             if cond(&errflg *eq 1) then(do)
+             enddo
+     endpgm:
+             chgcurlib  curlib(*crtdft)
+
+endpgm
