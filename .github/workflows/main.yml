@@ -1,47 +1,95 @@
-name: Connect to AS400
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  connect-to-as400:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install npm dependencies
-        run: npm install
-
-      - name:   
- Connect to AS400
-        run: |
-          node -e "
-            const ibmiCl = require('ibmi-cl');
-
-            const connectionOptions = {
-              host: 'pub400.com',
-              port: 22,
-              username: 'RPAREEK',
-              password: 'AUGUST@19',
-              library: 'your_as400_library' // Optional
-            };
-
-            ibmiCl.connect(connectionOptions, (err) => {
-              if (err) {
-                console.error('Error connecting to AS400:', err);
-                process.exit(1);
-              }
-              console.log('Connected to AS400 successfully!');
-            });
-          "
-
-      - name: Run AS400 commands (optional)
-        run: |
-          node -e "
-            // ... your AS400 command logic here ...
-          "
+All collection items must start at the same column (1:1)
+>  1 | name: Connect to AS400
+     | ^^^^^^^^^^^^^^^^^^^^^^
+>  2 |
+     | ^
+>  3 | on:
+     | ^
+>  4 |   push:
+     | ^
+>  5 |     branches: [main]
+     | ^
+>  6 |   pull_request:
+     | ^
+>  7 |     branches: [main]
+     | ^
+>  8 |
+     | ^
+>  9 | jobs:
+     | ^
+> 10 |   connect-to-as400:
+     | ^
+> 11 |     runs-on: ubuntu-latest
+     | ^
+> 12 |
+     | ^
+> 13 |     steps:
+     | ^
+> 14 |       - name: Checkout code
+     | ^
+> 15 |         uses: actions/checkout@v3
+     | ^
+> 16 |
+     | ^
+> 17 |       - name: Install npm dependencies
+     | ^
+> 18 |         run: npm install
+     | ^
+> 19 |
+     | ^
+> 20 |       - name:   
+     | ^
+> 21 |  Connect to AS400
+     | ^
+> 22 |         run: |
+     | ^
+> 23 |             const ibmiCl = require('ibmi-cl');
+     | ^
+> 24 |
+     | ^
+> 25 |             const connectionOptions = {
+     | ^
+> 26 |               host: 'pub400.com',
+     | ^
+> 27 |               port: 22,
+     | ^
+> 28 |               username: 'RPAREEK',
+     | ^
+> 29 |               password: 'AUGUST@19',
+     | ^
+> 30 |               library: 'your_as400_library' // Optional
+     | ^
+> 31 |             };
+     | ^
+> 32 |
+     | ^
+> 33 |             ibmiCl.connect(connectionOptions, (err) => {
+     | ^
+> 34 |               if (err) {
+     | ^
+> 35 |                 console.error('Error connecting to AS400:', err);
+     | ^
+> 36 |                 process.exit(1);
+     | ^
+> 37 |               }
+     | ^
+> 38 |               console.log('Connected to AS400 successfully!');
+     | ^
+> 39 |             });
+     | ^
+> 40 |           "
+     | ^
+> 41 |
+     | ^
+> 42 |       - name: Run AS400 commands (optional)
+     | ^
+> 43 |         run: |
+     | ^
+> 44 |           node -e "
+     | ^
+> 45 |             // ... your AS400 command logic here ...
+     | ^
+> 46 |           "
+     | ^
+> 47 |
+     | ^
