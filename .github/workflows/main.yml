@@ -16,7 +16,7 @@ jobs:
 
       - name: Install npm dependencies
         run: npm install
-
+                                                                                               
       - name:  Connect to AS400
         run:  |
            node -e "
@@ -37,7 +37,7 @@ jobs:
               }
               console.log('Connected to AS400 successfully!');
             });
-          "
+              "
 
       - name: Run AS400 commands (optional)
         run: |
