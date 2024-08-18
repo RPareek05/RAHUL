@@ -1,6 +1,6 @@
 All collection items must start at the same column (1:1)
 >  1 | name: Connect to AS400
-     | ^^^^^^^^^^^^^^^^^^^^^^
+     | ^
 >  2 |
      | ^
 >  3 | on:
