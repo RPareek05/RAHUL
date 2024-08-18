@@ -3,36 +3,45 @@ name: Connect to AS400
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   connect-to-as400:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Java environment
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
+      - name: Install npm dependencies
+        run: npm install
 
-      - name: Download and configure ibmjtopen
+      - name:   
+ Connect to AS400
         run: |
-          wget https://public.dhe.ibm.com/software/ibmi/tools/free/jtopen/latest/jtopen-current.jar
-          echo "export CLASSPATH=\$CLASSPATH:jtopen-current.jar" >> $GITHUB_ENV
-          echo "export PATH=\$PATH:\$GITHUB_WORKSPACE/jtopen-current.jar" >> $GITHUB_ENV
+          node -e "
+            const ibmiCl = require('ibmi-cl');
 
-      - name: Connect to AS400
-        run: |
-          java -jar jtopen-current.jar -s <pub400.con> -u <RPAREEK> -p <AUGUST@19> -c <AS400_CONNECTION_TYPE> -l <RPAREEK>
+            const connectionOptions = {
+              host: 'pub400.com',
+              port: 22,
+              username: 'RPAREEK',
+              password: 'AUGUST@19',
+              library: 'your_as400_library' // Optional
+            };
 
-      - name: Run AS400 commands
-        run: |
-          java -jar jtopen-current.jar -s <AS400_HOST> -u <AS400_USER> -p <AS400_PASSWORD> -c <AS400_CONNECTION_TYPE> -l <RPAREEK> -e "CRTDTAAARA RPAREEK/T1"
+            ibmiCl.connect(connectionOptions, (err) => {
+              if (err) {
+                console.error('Error connecting to AS400:', err);
+                process.exit(1);
+              }
+              console.log('Connected to AS400 successfully!');
+            });
+          "
 
-      - name: Handle connection errors
-        if: ${{ steps.connect-to-as400.outputs.connection_status == 'failed' }}
+      - name: Run AS400 commands (optional)
         run: |
-          echo "Connection to AS400 failed. Please check your credentials and connection settings."
-          exit 1
+          node -e "
+            // ... your AS400 command logic here ...
+          "
