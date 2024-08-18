@@ -17,9 +17,9 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
-      - name:   
- Connect to AS400
-        run: |
+      - name:  Connect to AS400
+        run:  |
+           node -e "
             const ibmiCl = require('ibmi-cl');
 
             const connectionOptions = {
