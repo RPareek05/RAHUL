@@ -20,7 +20,7 @@ jobs:
           node-version: 16.x  
       - run: npm install
       - name:  Connect to AS400
-        run:  |
+      -  run:  |
            node -e "
             const ibmiCl = require('ibmi-cl');
 
