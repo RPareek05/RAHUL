@@ -1,9 +1,5 @@
-  connect-to-as400:
-  - name: Generate makefile
-  run: so -bf make -l `git diff --name-only origin/main origin/${GITHUB_HEAD_REF}`
-  Deploy to ibm:
-  - name: Deploy to IBM i
-  run: |
+ - name: Deploy to IBM
+   run: |
     ici \
       --cmd "mkdir -p './builds/ics_${GITHUB_HEAD_REF}'" \
       --rcwd "./builds/ics_${GITHUB_HEAD_REF}" \
@@ -14,4 +10,3 @@
     IBMI_USER: rahul
     IBMI_PASSWORD: welcome
     IBMI_SSH_PORT: 22
-       
